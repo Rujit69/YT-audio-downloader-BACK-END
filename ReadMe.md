@@ -1,5 +1,3 @@
-Got it! Here’s the **entire README.md content all together in one single block** you can copy-paste directly:
-
 ```md
 # YouTube Audio Downloader
 
@@ -21,12 +19,11 @@ A simple and efficient full-stack app to download high-quality YouTube audio (M4
 ---
 
 ## 📂 Project Structure
-
 ```
 
-/backend      - FastAPI backend API
-/frontend     - React frontend app
-README.md    - This documentation
+/backend - FastAPI backend API
+/frontend - React frontend app
+README.md - This documentation
 
 ````
 
@@ -59,8 +56,8 @@ README.md    - This documentation
    uvicorn main:app --reload
    ```
 
-* API endpoint: `POST http://127.0.0.1:8000/submit-url`
-* Form data key: `youtube_url` (string)
+- API endpoint: `POST http://127.0.0.1:8000/submit-url`
+- Form data key: `youtube_url` (string)
 
 ---
 
@@ -84,9 +81,9 @@ README.md    - This documentation
    npm start
    ```
 
-* Open `http://localhost:3000` in browser.
-* Enter YouTube URL and submit.
-* Audio file downloads with correct original filename.
+- Open `http://localhost:3000` in browser.
+- Enter YouTube URL and submit.
+- Audio file downloads with correct original filename.
 
 ---
 
@@ -111,33 +108,33 @@ curl -X POST -F "youtube_url=https://www.youtube.com/watch?v=example" http://127
 
 ## 🧹 Cleanup & Safety
 
-* Filenames sanitized for cross-platform safety.
-* Temporary files deleted after streaming using FastAPI BackgroundTasks.
-* CORS enabled for frontend/backend communication.
+- Filenames sanitized for cross-platform safety.
+- Temporary files deleted after streaming using FastAPI BackgroundTasks.
+- CORS enabled for frontend/backend communication.
 
 ---
 
 ## 🛠️ Dependencies
 
-* **Backend:**
+- **Backend:**
 
-  * fastapi
-  * uvicorn
-  * yt-dlp
-  * python-multipart
+  - fastapi
+  - uvicorn
+  - yt-dlp
+  - python-multipart
 
-* **Frontend:**
+- **Frontend:**
 
-  * react
-  * (Other typical React dependencies)
+  - react
+  - (Other typical React dependencies)
 
 ---
 
 ## ⚙️ Deployment Notes
 
-* Backend can be deployed on platforms like Render, Heroku, or AWS Lambda.
-* Use ephemeral directories like `/tmp` for downloads if required.
-* Frontend can be hosted on Netlify, Vercel, or any static hosting.
+- Backend can be deployed on platforms like Render, Heroku, or AWS Lambda.
+- Use ephemeral directories like `/tmp` for downloads if required.
+- Frontend can be hosted on Netlify, Vercel, or any static hosting.
 
 ---
 
@@ -147,11 +144,10 @@ MIT License — free to use and modify.
 
 ---
 
-
-
 Enjoy hassle-free YouTube audio downloads! 🎧🚀
 
 ```
 
 ---
 
+```
