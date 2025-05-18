@@ -1,5 +1,5 @@
 ```md
-# YouTube Audio Downloader
+#YouTube Audio Downloader
 
 ![FastAPI](https://img.shields.io/badge/FastAPI-v0.95-green) ![React](https://img.shields.io/badge/React-18-blue) ![Python](https://img.shields.io/badge/Python-3.10-blue) ![yt-dlp](https://img.shields.io/badge/yt--dlp-latest-orange)
 
