@@ -1,5 +1,4 @@
-```md
-#YouTube Audio Downloader
+# YouTube Audio Downloader
 
 ![FastAPI](https://img.shields.io/badge/FastAPI-v0.95-green) ![React](https://img.shields.io/badge/React-18-blue) ![Python](https://img.shields.io/badge/Python-3.10-blue) ![yt-dlp](https://img.shields.io/badge/yt--dlp-latest-orange)
 
@@ -19,13 +18,14 @@ A simple and efficient full-stack app to download high-quality YouTube audio (M4
 ---
 
 ## 📂 Project Structure
+
 ```
 
 /backend - FastAPI backend API
 /frontend - React frontend app
 README.md - This documentation
 
-````
+```
 
 ---
 
@@ -35,6 +35,8 @@ README.md - This documentation
 
    ```bash
    cd backend
+   ```
+
 ````
 
 2. Create virtual environment and activate:
@@ -151,3 +153,4 @@ Enjoy hassle-free YouTube audio downloads! 🎧🚀
 ---
 
 ```
+````
