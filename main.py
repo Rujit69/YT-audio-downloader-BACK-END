@@ -1,94 +1,59 @@
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from fastapi.responses import StreamingResponse
 import yt_dlp
-from yt_dlp.utils import DownloadError
+import os
+import unicodedata
 
 app = FastAPI()
 
-# Optional: Allow frontend to access API (adjust origins as needed)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace "*" with specific frontend URL in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
 )
 
+def sanitize_filename(name):
+    # Normalize and remove unsupported characters
+    return unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode("ascii").replace(" ", "_")
+
 @app.post("/submit-url")
-async def receive_url(youtube_url: str = Form(...)):
+async def receive_url(youtube_url: str = Form(...), background_tasks: BackgroundTasks = None):
     ydl_opts = {
-    'format': 'bestaudio[ext=m4a]/bestaudio',  # Prefer high-quality M4A
-    'outtmpl': 'my_audio.%(ext)s',             # Save as 'my_audio.m4a' or similar
-    'postprocessors': [] , # Don't use ffmpeg or convert
-    'quiet': True   
-}
+        'format': 'bestaudio[ext=m4a]/bestaudio',
+        'outtmpl': '%(title)s.%(ext)s',
+        'quiet': True,
+    }
+
     try:
-     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-         ydl.download([youtube_url])
-     return {"status": "success", "message": "Download completed"}
-    
-    except DownloadError as e:
-        return {"status": "error", "message": f"Download error: {str(e)}"}
-    
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(youtube_url, download=True)
+            filename = ydl.prepare_filename(info)
+
+        if not os.path.exists(filename):
+            raise HTTPException(status_code=404, detail="Downloaded file not found")
+
+        safe_filename = sanitize_filename(os.path.basename(filename))
+
+        def iterfile():
+            with open(filename, mode="rb") as file_like:
+                yield from file_like
+
+        # Schedule file deletion after response is complete
+        background_tasks.add_task(os.remove, filename)
+
+        return StreamingResponse(
+            iterfile(),
+            media_type="audio/m4a",
+            headers={
+                "Content-Disposition": f'attachment; filename="{safe_filename}"'
+            }
+        )
+
+    except yt_dlp.utils.DownloadError as e:
+        raise HTTPException(status_code=400, detail=f"Download error: {str(e)}")
     except Exception as e:
-        return {"status": "error", "message": f"Unexpected error: {str(e)}"}
-    # Do something with the URL (e.g., print, process, or download)
-   
-    
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#! format and size checker not implemented currently
-# print("Available audio formats:\n")
-# for f in formats:
-#         if f.get('vcodec') == 'none':  # No video = audio only
-#             abr = f.get('abr', 'N/A')  # Audio bitrate
-#             ext = f.get('ext')
-#             format_id = f.get('format_id')
-#             filesize = f.get('filesize', 'N/A')
-#             print(f"ID: {format_id} | EXT: {ext} | ABR: {abr} kbps | Size: {filesize}")
-
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
