@@ -14,6 +14,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["Content-Disposition"],
+    
 )
 
 def sanitize_filename(name):
@@ -26,6 +27,7 @@ async def receive_url(youtube_url: str = Form(...), background_tasks: Background
         'format': 'bestaudio[ext=m4a]/bestaudio',
         'outtmpl': '%(title)s.%(ext)s',
         'quiet': True,
+        'cookiefile': 'path/to/cookies.txt',
     }
 
     try:
